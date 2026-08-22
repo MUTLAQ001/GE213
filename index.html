@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GE 213">
-<title>GE 213 - 472</title>
+<title>GE 213 - 481</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <script>
@@ -749,41 +749,11 @@ const WEEKS = [
 const ClsBlock = ({type, title, items}) => !items || !items.length ? null : h("div", {className: `cls-blk ${type}`},
   h("h5", null, h("span", {className: "cls-dot"}), title),
   h("ul", null, items.map((it, i) => h("li", {key: i}, it))));
-const CalendarView = () => {
-  const [open, setOpen] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ge213_week')) ?? 1; } catch (e) { return 1; }
-  });
-  useEffect(() => localStorage.setItem('ge213_week', JSON.stringify(open)), [open]);
-  return h("div", {className: "content-area"},
-    h("div", {className: "section-separator", style: {color: 'var(--gold)'}}, h(Icons.File, null), " خريطة التسليمات"),
-    h("div", {className: "cal-map"}, DUES.map(d => h("div", {key: d.n, className: `a-row ${d.c}`, style: {marginBottom: 0}},
-      h("div", {className: "a-count"}, d.n),
-      h("div", {className: "a-text"},
-        h("strong", null, d.t),
-        h("span", null, d.k),
-        h("div", {className: "due-chips"},
-          h("span", {className: "due-chip hot"}, "التسليم ", d.due),
-          d.ret ? h("span", {className: "due-chip"}, "الإرجاع ", d.ret) : h("span", {className: "due-chip"}, "بدون إعادة تسليم"),
-          d.re ? h("span", {className: "due-chip"}, "إعادة التسليم ", d.re) : null))))),
-    h("div", {className: "section-separator", style: {color: 'var(--cyan)'}}, h(Icons.Clock, null), " التقويم الأسبوعي — حصتان أسبوعيًا"),
-    WEEKS.map(w => h("div", {key: w.w, className: `wk-item ${open === w.w ? 'open' : ''}`},
-      h("button", {className: "wk-head", onClick: () => setOpen(o => o === w.w ? 0 : w.w), "aria-expanded": open === w.w},
-        h("span", {className: "wk-num"}, w.w),
-        h("span", {className: "wk-title"}, "الأسبوع ", w.w),
-        h("span", {className: "wk-peek"}, w.peek),
-        h("span", {className: "wk-chev"}, h(Icons.ChevronDown, null))),
-      open === w.w && h("div", {className: `wk-body ${w.cls.length === 1 ? 'solo' : ''}`},
-        w.cls.map(c => c.vac ?
-          h("div", {key: c.id, className: "cls-card vac"},
-            h("span", {className: "vac-moon"}, "🌙"),
-            h("b", null, c.vacTxt),
-            h("span", null, c.vacSub)) :
-          h("div", {key: c.id, className: "cls-card"},
-            h("div", {className: "cls-top"}, h("span", {className: "cls-id"}, "حصة ", c.id), h("small", null, "ساعتان")),
-            h(ClsBlock, {type: "b-top", title: "موضوعات الحصة", items: c.topics}),
-            h(ClsBlock, {type: "b-due", title: "المطلوب اليوم", items: c.due}),
-            h(ClsBlock, {type: "b-prep", title: "استعد للحصة القادمة", items: c.prep})))))));
-};
+const CalendarView = () => h("div", {className: "content-area"},
+  h("div", {className: "cls-card vac", style: {marginTop: 8, gap: 10, padding: '46px 18px'}},
+    h("span", {className: "vac-moon", style: {color: 'var(--gold)', display: 'flex'}}, h(Icons.Clock, null)),
+    h("b", {style: {fontSize: '1.05rem'}}, "سيتم إضافته قريبًا"),
+    h("span", null, "تقويم الترم 481 تحت الإعداد")));
 const Counter = ({
   l,
   v,
@@ -907,7 +877,7 @@ const ExplainModal = ({
       h("div", {className: "explain-hero"},
         h("div", {className: "explain-hero-icon"}, h(Icons.Concept, null)),
         h("h2", null, "شرح المقرر"),
-        h("span", {className: "explain-hero-chip"}, "GE 213 — TERM 472")),
+        h("span", {className: "explain-hero-chip"}, "GE 213 — TERM 481")),
       h("div", {className: "explain-intro"},
         h(Icons.AlertFill, null),
         h("p", null, h("strong", null, "GE213 امتداد لـ GE211 لكن بدون كويزات وبدون قسمين."), " قسم واحد فقط: حصتان أسبوعيًا، وكل شيء يعتمد على الواجبات والمشروع والانضباط — افهم نظام العيوب من أول يوم.")),
@@ -971,7 +941,7 @@ const ExplainModal = ({
       h("p", {className: "explain-footer"}, h(Icons.Edit, null), " إذا استجدت أي أشياء إضافية، إن شاء الله تُذكر هنا في نفس هذه الخانة.")));
 };
 function App() {
-  const [tab, setTab] = useState('calendar'),
+  const [tab, setTab] = useState('grades'),
     [modal, setModal] = useState(false);
   const tabIdx = tab === 'calendar' ? 0 : 1;
   return h("div", {className: "app"},
@@ -986,8 +956,7 @@ function App() {
         h("h1", {className: "title"}, "GE 213"),
         h("p", {className: "subtitle"}, "Introduction to Engineering Design-2"),
         h("div", {className: "header-meta"},
-          h("span", {className: "meta-chip"}, "TERM 472"),
-          h("span", {className: "meta-chip neutral"}, "المرجع الكامل للمقرر")),
+          h("span", {className: "meta-chip"}, "TERM 481")),
         h("div", {className: "header-rule"})),
       h("div", {className: "nav-tabs", "data-active": tabIdx},
         h("div", {className: "nav-glider"}),
