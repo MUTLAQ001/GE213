@@ -78,10 +78,11 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .author-link:hover{border-color:rgba(242,193,78,0.55);box-shadow:0 6px 18px rgba(242,193,78,0.12);transform:translateY(-2px)}
 .author-link:hover .author-icon{background:rgba(242,193,78,0.2);transform:rotate(-8deg)}
 .author-link:hover .author-eyebrow{color:var(--gold)}
-.nav-tabs{background:var(--surface);padding:5px;border-radius:16px;display:grid;grid-template-columns:1fr 1fr;position:relative;margin-bottom:22px;border:1px solid var(--line);overflow:hidden}
-.nav-glider{position:absolute;top:5px;bottom:5px;width:calc((100% - 10px)/2);right:5px;background:linear-gradient(160deg,rgba(255,255,255,0.12),rgba(255,255,255,0.05));border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.35);transition:transform 0.35s cubic-bezier(0.2,0,0,1);z-index:1}
+.nav-tabs{background:var(--surface);padding:5px;border-radius:16px;display:grid;grid-template-columns:1fr 1fr 1fr;position:relative;margin-bottom:22px;border:1px solid var(--line);overflow:hidden}
+.nav-glider{position:absolute;top:5px;bottom:5px;width:calc((100% - 10px)/3);right:5px;background:linear-gradient(160deg,rgba(255,255,255,0.12),rgba(255,255,255,0.05));border:1px solid var(--line-strong);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.35);transition:transform 0.35s cubic-bezier(0.2,0,0,1);z-index:1}
 .nav-tabs[data-active="0"] .nav-glider{transform:translateX(0)}
 .nav-tabs[data-active="1"] .nav-glider{transform:translateX(-100%)}
+.nav-tabs[data-active="2"] .nav-glider{transform:translateX(-200%)}
 .tab-btn{position:relative;z-index:2;text-align:center;padding:13px 8px;background:transparent;border:none;color:var(--text-faint);font-weight:700;font-size:0.95rem;cursor:pointer;border-radius:12px;transition:color 0.3s}
 .tab-btn.active{color:var(--text)}
 .sub-nav-wrapper{background:rgba(255,255,255,0.025);border-radius:14px;padding:4px;position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;margin-bottom:24px;border:1px solid rgba(255,255,255,0.05);overflow:hidden}
@@ -683,15 +684,14 @@ const Icons = {
 const h = React.createElement;
 const DUES = [
   {n:1,t:"واجب إكسل",k:"جماعي",c:"gold",due:"4-1",ret:"5-1",re:"6-1"},
-  {n:2,t:"واجب الفصل 1",k:"جماعي",c:"gold",due:"6-2",ret:"7-2",re:"8-2"},
-  {n:3,t:"واجب الفصل 4",k:"فردي",c:"cyan",due:"8-1",ret:"9-1",re:"10-1"},
-  {n:4,t:"واجب جماعي داخل الحصة",k:"جماعي",c:"gold",due:"9-1"},
-  {n:5,t:"واجب الفصل 7 — داخل الحصة",k:"فردي",c:"cyan",due:"10-1"},
-  {n:6,t:"واجب فردي داخل الحصة",k:"فردي",c:"cyan",due:"11-1"},
-  {n:7,t:"إزالة العيوب Defect Removal",k:"فردي",c:"cyan",due:"12-1"},
-  {n:8,t:"التقرير النهائي لمشروع المقرر",k:"جماعي",c:"gold",due:"13-1"},
-  {n:9,t:"التسليم النهائي لملف المقرر",k:"جماعي",c:"gold",due:"13-1"},
-  {n:10,t:"الاحتفالية — عرض المشروع",k:"فردي",c:"cyan",due:"13-1"}
+  {n:2,t:"واجب الفصل 1",k:"فردي",c:"cyan",due:"6-1",ret:"7-1",re:"8-1"},
+  {n:3,t:"واجب الفصل 4 — جماعي داخل الحصة",k:"جماعي",c:"gold",due:"9-1"},
+  {n:4,t:"واجب فردي داخل الحصة",k:"فردي",c:"cyan",due:"10-2"},
+  {n:5,t:"واجب الفصل 7 — جماعي داخل الحصة",k:"جماعي",c:"gold",due:"11-1"},
+  {n:6,t:"إزالة العيوب Defect Removal",k:"فردي",c:"cyan",due:"12-1"},
+  {n:7,t:"التقرير النهائي لمشروع المقرر",k:"جماعي",c:"gold",due:"15-1"},
+  {n:8,t:"التسليم النهائي لملف المقرر",k:"جماعي",c:"gold",due:"15-1"},
+  {n:9,t:"الاحتفالية — عرض المشروع",k:"فردي",c:"cyan",due:"15-1"}
 ];
 const WEEKS = [
   {w:1,peek:"التعريف بالمقرر · معايير الفريق",cls:[
@@ -706,54 +706,116 @@ const WEEKS = [
     {id:"3-1",topics:["واجب إكسل — عمل جماعي","تعبئة نموذج التوقيع"],due:["إحضار نموذج التوقيع","واجب إكسل مع قائمة التدقيق وفحص عمل الفريق"],prep:["شراء الكتاب How to Model It (HTMI)"]},
     {id:"3-2",topics:["الفصل 1: مقدمة في النماذج","النماذج · الاستدلالات · أنواع التمثيل · القيود"],due:["إحضار الكتاب HTMI"],prep:["قراءة وحل مهام الفصل 1","إكمال واجب إكسل مع قائمة التدقيق وفحص عمل الفريق"]}
   ]},
-  {w:4,peek:"الفصل 1 · تسليم واجب إكسل",cls:[
+  {w:4,peek:"الفصل 1 · إجازة اليوم الوطني",cls:[
     {id:"4-1",topics:["الفصل 1 — تكملة","المتغيرات · المعاملات · المفاضلات · الحساسية"],due:["إحضار الكتاب HTMI","تسليم واجب إكسل مع قائمة التدقيق وفحص عمل الفريق"],prep:["قراءة وحل مهام الفصل 1","طباعة وقراءة توقعات واجب الفصل 1 وقائمة التدقيق","طباعة وقراءة الاستبيان الافتتاحي"]},
-    {id:"4-2",topics:["الاستبيان الافتتاحي","واجب الفصل 1 — جماعي"],due:["إحضار الكتاب HTMI","إحضار الاستبيان الافتتاحي","توقعات واجب الفصل 1 مع قائمة التدقيق وفحص الفريق"],prep:["طباعة ومراجعة التقرير النموذجي (قبل حصة 5-2)"]}
+    {id:"4-2",vac:true,vacTxt:"إجازة اليوم الوطني",vacSub:"الأربعاء والخميس 23-24 سبتمبر 2026 — لا توجد حصة"}
   ]},
-  {w:5,peek:"إجازة الأحد · التقرير النموذجي",cls:[
-    {id:"5-1",vac:true,vacTxt:"إجازة رسمية",vacSub:"الأحد 22 فبراير 2026 — لا توجد حصة"},
+  {w:5,peek:"الاستبيان الافتتاحي · التقرير النموذجي",cls:[
+    {id:"5-1",topics:["الاستبيان الافتتاحي Entry Survey","واجب الفصل 1 — فردي"],due:["إحضار الكتاب HTMI","إحضار الاستبيان الافتتاحي","توقعات واجب الفصل 1 مع قائمة التدقيق وفحص الفريق"],prep:["طباعة ومراجعة التقرير النموذجي Sample Report"]},
     {id:"5-2",topics:["تغذية راجعة على واجب إكسل","التقرير النموذجي Sample Report"],due:["التقرير النموذجي"],prep:["طباعة ومراجعة ملف إكسل — الجزء الثاني"]}
   ]},
-  {w:6,peek:"إكسل 2 · تسليم واجب الفصل 1",cls:[
-    {id:"6-1",topics:["مقدمة في إكسل — الجزء الثاني"],due:["إحضار ملف إكسل — الجزء الثاني"],prep:["إكمال واجب الفصل 1 مع قائمة التدقيق وفحص الفريق","إعادة تسليم واجب إكسل"]},
-    {id:"6-2",topics:["الفصل 4: قضية المدير الحرّان العطشان","الاستدلالات · الافتراضات · النماذج"],due:["تسليم واجب الفصل 1 مع قائمة التدقيق وفحص الفريق","إحضار الكتاب HTMI"],prep:["قراءة وحل مهام الفصل 4"]}
+  {w:6,peek:"إكسل 2 · اختبار منتصف الفصل",cls:[
+    {id:"6-1",topics:["مقدمة في إكسل — الجزء الثاني"],due:["إحضار ملف إكسل — الجزء الثاني","تسليم واجب الفصل 1 مع قائمة التدقيق وفحص الفريق"],prep:["إكمال وممارسة جميع مهام ملف إكسل — الجزء الثاني"]},
+    {id:"6-2",vac:true,vacTxt:"اختبار منتصف الفصل",vacSub:"Midterm Exam"}
   ]},
-  {w:7,peek:"الفصل 4 · ملف المقرر — تقييم 1",cls:[
-    {id:"7-1",topics:["الفصل 4 — تكملة","التجميع Lumping · المعايرة Calibration"],due:["إحضار الكتاب HTMI","عرض ملخص واجب القراءة"],prep:["الاستعداد للواجب الجماعي على الفصل 4","إحضار ملف المقرر مع قائمة التدقيق 1"]},
-    {id:"7-2",topics:["الفصل 4 — تكملة","أداة Goal Seek"],due:["إحضار الكتاب HTMI","عرض ملخص واجب القراءة","إحضار ملف المقرر مع قائمة التدقيق 1"],prep:["الاستعداد للواجب الجماعي داخل الحصة على الفصل 4"]}
+  {w:7,peek:"اختبار منتصف الفصل · الفصل 4",cls:[
+    {id:"7-1",vac:true,vacTxt:"اختبار منتصف الفصل",vacSub:"Midterm Exam"},
+    {id:"7-2",topics:["الفصل 4: قضية المدير الحرّان العطشان","الاستدلالات · الافتراضات · النماذج"],due:["إحضار الكتاب HTMI"],prep:["قراءة وحل مهام الفصل 4"]}
   ]},
-  {w:8,peek:"واجب فردي ف4 · بداية الفصل 7",cls:[
-    {id:"8-1",topics:["واجب فردي على الفصل 4"],due:[],prep:["إحضار الكتاب HTMI"]},
-    {id:"8-2",topics:["الفصل 7: معضلة الطالب","دالة الهدف · القيود · التعقيد","التقييم الأول لملف المقرر — قائمة التدقيق 1"],due:["إحضار الكتاب HTMI","ملف المقرر مع قائمة التدقيق 1","إعادة تسليم واجب الفصل 1"],prep:["قراءة وحل مهام الفصل 7"]}
+  {w:8,peek:"الفصل 4 · ملف المقرر — تقييم 1",cls:[
+    {id:"8-1",topics:["الفصل 4 — تكملة","التجميع Lumping · المعايرة Calibration"],due:["إحضار الكتاب HTMI","عرض ملخص واجب القراءة"],prep:["الاستعداد للواجب على الفصل 4","إحضار ملف المقرر مع قائمة التدقيق 1"]},
+    {id:"8-2",topics:["الفصل 4 — تكملة","أداة Goal Seek"],due:["إحضار الكتاب HTMI","عرض ملخص واجب القراءة","إحضار ملف المقرر مع قائمة التدقيق 1"],prep:["الاستعداد للواجب الجماعي داخل الحصة على الفصل 4"]}
   ]},
-  {w:9,peek:"واجب جماعي · مشروع المقرر ج1",cls:[
-    {id:"9-1",topics:["واجب جماعي داخل الحصة","استكشاف توقعات مشروع المقرر — الجزء الأول"],due:[],prep:["إحضار ملف المقرر مع قائمة التدقيق 2"]},
-    {id:"9-2",topics:["الفصل 7 — تكملة","الحلول الممكنة وغير الممكنة","الأمثَلة وتوزيع الموارد","التقييم الثاني لملف المقرر — قائمة التدقيق 2"],due:["إحضار الكتاب HTMI","عرض ملخص واجب القراءة"],prep:["قراءة وحل مهام الفصل 7","الاستعداد لواجب فردي داخل الحصة"]}
+  {w:9,peek:"واجب جماعي ف4 · بداية الفصل 7",cls:[
+    {id:"9-1",topics:["واجب جماعي داخل الحصة على الفصل 4"],due:[],prep:["إحضار الكتاب HTMI"]},
+    {id:"9-2",topics:["الفصل 7: معضلة الطالب","دالة الهدف · القيود · التعقيد","التقييم الأول لملف المقرر — قائمة التدقيق 1"],due:["إحضار الكتاب HTMI","إعادة تسليم واجب الفصل 1"],prep:["قراءة وحل مهام الفصل 7","طباعة الجزء الأول من مشروع المقرر"]}
   ]},
-  {w:10,peek:"واجب الفصل 7 · مشروع المقرر ج1",cls:[
-    {id:"10-1",topics:["الفصل 7 — تكملة","واجب الفصل 7 — فردي داخل الحصة","إعادة تسليم واجب الفصل 4"],due:[],prep:["طباعة ومراجعة توقعات مشروع المقرر — الجزء الأول"]},
-    {id:"10-2",topics:["مشروع المقرر — الجزء الأول"],due:["عرض ملخص توقعات مشروع المقرر — الجزء الأول"],prep:["الانتهاء من تعريف مشكلة المشروع (الجزء الأول)"]}
+  {w:10,peek:"الفصل 7 · مشروع المقرر ج1",cls:[
+    {id:"10-1",topics:["الفصل 7 — تكملة","الحلول الممكنة وغير الممكنة","الأمثَلة وتوزيع الموارد"],due:["إحضار الكتاب HTMI","عرض ملخص واجب القراءة"],prep:["قراءة وحل مهام الفصل 7","الاستعداد لواجب فردي داخل الحصة","طباعة ومراجعة توقعات مشروع المقرر — الجزء الأول"]},
+    {id:"10-2",topics:["واجب فردي داخل الحصة","استكشاف توقعات مشروع المقرر — الجزء الأول"],due:[],prep:["إحضار ملف المقرر مع قائمة التدقيق 2"]}
   ]},
-  {w:11,peek:"واجب فردي · مشروع المقرر ج2",cls:[
-    {id:"11-1",topics:["واجب فردي داخل الحصة"],due:[],prep:["طباعة ومراجعة توقعات مشروع المقرر — الجزء الثاني","تحقيق توقعات الجزء الثاني"]},
-    {id:"11-2",topics:["مشروع المقرر — الجزء الثاني","عرض ملخص الجزء الثاني","التقييم المرحلي للمشروع"],due:["توقعات مشروع المقرر — الجزء الثاني"],prep:["إكمال تقرير المشروع وتجهيز العرض النهائي وملف المقرر (خارج الحصة)","الاستبيان الختامي وتقييم المقرر","الاستعداد لواجب إزالة العيوب"]}
+  {w:11,peek:"واجب الفصل 7 · مشروع المقرر ج1",cls:[
+    {id:"11-1",topics:["الفصل 7 — تكملة","واجب الفصل 7 — جماعي داخل الحصة","التقييم الثاني لملف المقرر — قائمة التدقيق 2"],due:[],prep:["عرض ملخص توقعات مشروع المقرر — الجزء الأول"]},
+    {id:"11-2",topics:["مشروع المقرر — الجزء الأول"],due:["عرض ملخص توقعات مشروع المقرر — الجزء الأول"],prep:["الانتهاء من تعريف مشكلة المشروع (الجزء الأول)","الاستعداد لواجب إزالة العيوب"]}
   ]},
-  {w:12,peek:"إزالة العيوب Defect Removal",cls:[
-    {id:"12-1 / 12-2",solo:true,topics:["واجب إزالة العيوب — فردي داخل الحصة"],due:[],prep:["إكمال تقرير المشروع والعرض النهائي وملف المقرر استعدادًا للأسبوع الأخير"]}
+  {w:12,peek:"إزالة العيوب · اختبار منتصف الفصل",cls:[
+    {id:"12-1",topics:["واجب إزالة العيوب — داخل الحصة"],due:[],prep:["طباعة ومراجعة توقعات مشروع المقرر — الجزء الثاني","تحقيق توقعات الجزء الثاني"]},
+    {id:"12-2",vac:true,vacTxt:"اختبار منتصف الفصل",vacSub:"Midterm Exam"}
   ]},
-  {w:13,peek:"التسليم النهائي · الاحتفالية",cls:[
-    {id:"13-1",topics:["التسليم النهائي لمشروع المقرر","التسليم النهائي لملف المقرر","عرض المشروع — الاحتفالية"],due:["التسليم النهائي لتقرير المشروع","تسليم العرض النهائي","التسليم النهائي لملف المقرر"],prep:[]},
-    {id:"13-2",topics:["استكمال عروض المشاريع — الاحتفالية"],due:["التسليم النهائي لتقرير المشروع","تسليم العرض النهائي","التسليم النهائي لملف المقرر"],prep:[]}
+  {w:13,peek:"اختبار منتصف الفصل · إجازة الخريف",cls:[
+    {id:"13-1",vac:true,vacTxt:"اختبار منتصف الفصل",vacSub:"Midterm Exam"},
+    {id:"13-2",vac:true,vacTxt:"إجازة الخريف",vacSub:"Autumn Holiday — لا توجد حصة"}
+  ]},
+  {w:14,peek:"مشروع المقرر ج2 · تقييم مرحلي",cls:[
+    {id:"14-1 / 14-2",solo:true,topics:["مشروع المقرر — الجزء الثاني","عرض ملخص الجزء الثاني","التقييم المرحلي للمشروع"],due:["توقعات مشروع المقرر — الجزء الثاني","التقييم المرحلي للمشروع"],prep:["إكمال تقرير المشروع وتجهيز العرض النهائي وملف المقرر (خارج الحصة)","إكمال العمل في ملف المقرر","الاستبيان الختامي وتقييم المقرر"]}
+  ]},
+  {w:15,peek:"التسليم النهائي · الاحتفالية",cls:[
+    {id:"15-1 / 15-2",solo:true,topics:["التسليم النهائي لمشروع المقرر","التسليم النهائي لملف المقرر","عرض المشروع — الاحتفالية"],due:["التسليم النهائي لتقرير المشروع","تسليم العرض النهائي","التسليم النهائي لملف المقرر"],prep:[]}
   ]}
 ];
 const ClsBlock = ({type, title, items}) => !items || !items.length ? null : h("div", {className: `cls-blk ${type}`},
   h("h5", null, h("span", {className: "cls-dot"}), title),
   h("ul", null, items.map((it, i) => h("li", {key: i}, it))));
-const CalendarView = () => h("div", {className: "content-area"},
-  h("div", {className: "cls-card vac", style: {marginTop: 8, gap: 10, padding: '46px 18px'}},
-    h("span", {className: "vac-moon", style: {color: 'var(--gold)', display: 'flex'}}, h(Icons.Clock, null)),
-    h("b", {style: {fontSize: '1.05rem'}}, "سيتم إضافته قريبًا"),
-    h("span", null, "تقويم الترم 481 تحت الإعداد")));
+const ClassCard = ({c}) => c.vac
+  ? h("div", {className: "cls-card vac"},
+      h("span", {className: "vac-moon", style: {color: 'var(--gold)', display: 'flex'}}, h(Icons.Clock, null)),
+      h("b", null, c.vacTxt),
+      c.vacSub ? h("span", null, c.vacSub) : null)
+  : h("div", {className: "cls-card"},
+      h("span", {className: "cls-id"}, c.id),
+      h(ClsBlock, {type: "b-top", title: "محتوى الحصة", items: c.topics}),
+      h(ClsBlock, {type: "b-due", title: "مطلوب اليوم", items: c.due}),
+      h(ClsBlock, {type: "b-prep", title: "التحضير القادم", items: c.prep}));
+const WeekItem = ({wk, open, toggle}) => {
+  const isOpen = open === wk.w;
+  const solo = wk.cls.length === 1;
+  return h("div", {className: `wk-item ${isOpen ? 'open' : ''}`},
+    h("button", {className: "wk-head", onClick: () => toggle(wk.w)},
+      h("span", {className: "wk-num"}, wk.w),
+      h("span", {className: "wk-title"}, `الأسبوع ${wk.w}`),
+      h("span", {className: "wk-peek"}, wk.peek),
+      h("span", {className: "wk-chev"}, h(Icons.ChevronDown, null))),
+    isOpen && h("div", {className: `wk-body ${solo ? 'solo' : ''}`},
+      wk.cls.map(c => h(ClassCard, {key: c.id, c}))));
+};
+const CalendarView = () => {
+  const [open, setOpen] = useState(1);
+  const toggle = w => setOpen(o => o === w ? null : w);
+  return h("div", {className: "content-area"},
+    h("div", {className: "section-separator"}, "الجدول الأسبوعي — الترم 481"),
+    WEEKS.map(wk => h(WeekItem, {key: wk.w, wk, open, toggle})),
+    h("div", {className: "section-separator"}, "جدول الواجبات"),
+    h("div", {className: "cls-card"},
+      DUES.map(d => h("div", {key: d.n, className: "input-row"},
+        h("label", null, `${d.n}. ${d.t} (${d.k})`),
+        h("div", {className: "due-chips"},
+          h("span", {className: "due-chip hot"}, `تسليم ${d.due}`),
+          d.ret ? h("span", {className: "due-chip"}, `إرجاع ${d.ret}`) : null,
+          d.re ? h("span", {className: "due-chip"}, `إعادة ${d.re}`) : null)))));
+};
+const FILES = [
+  {n: 1, file: "files/01-FDM.pdf", title: "ملف اليوم الأول", sub: "First Day Material", desc: "تعريف عام بمقرر GE-213 ومحتواه وآلية العمل فيه."},
+  {n: 2, file: "files/02-Calendar-481.pdf", title: "تقويم الترم", sub: "Calendar — Term 481", desc: "الجدول الأسبوعي الكامل لكل الحصص والمهام والتسليمات."},
+  {n: 3, file: "files/03-Portfolio-Expectations.pdf", title: "توقعات ملف المقرر", sub: "Expectations of Portfolio", desc: "معايير وتوقعات إعداد ملف المقرر (Portfolio) وقوائم التدقيق."},
+  {n: 4, file: "files/04-Technical-Work-Reports.pdf", title: "توقعات تقارير العمل الفني", sub: "Technical Work Reports", desc: "معايير كتابة وتقييم تقارير العمل الفني."},
+  {n: 5, file: "files/05-Student-Sign-Off.pdf", title: "نموذج التوقيع Sign-off", sub: "Student Sign-off Form", desc: "نموذج توقيع الطالب على استلام وفهم متطلبات المقرر."},
+  {n: 6, file: "files/06-Student-Entry-Survey.pdf", title: "الاستبيان الافتتاحي", sub: "Student Entry Survey", desc: "استبيان تعريفي يُعبّى في بداية الفصل."},
+  {n: 7, file: "files/07-Team-Norms.pdf", title: "معايير الفريق", sub: "Setting Team Norms", desc: "خطوات وضع معايير العمل الجماعي داخل الفريق."},
+  {n: 8, file: "files/08-Team-Meeting-Minutes.pdf", title: "محضر اجتماع الفريق", sub: "Team Meeting Minutes", desc: "نموذج توثيق اجتماعات الفريق."},
+  {n: 9, file: "files/09-Excel-Part1.pdf", title: "مقدمة في إكسل — الجزء الأول", sub: "Introduction to Excel — Part I", desc: "ملف تدريبي شامل لتعلم أساسيات إكسل."}
+];
+const FilesView = () => h("div", {className: "content-area"},
+  h("div", {className: "section-separator"}, "ملفات المقرر"),
+  FILES.map(f => h("div", {key: f.n, className: "pro-resource-card"},
+    h("div", {className: "resource-header"},
+      h("div", {className: "resource-icon-box type-files"}, h(Icons.File, null)),
+      h("div", {className: "resource-info"},
+        h("h3", null, f.title),
+        h("p", null, f.sub))),
+    h("p", {style: {fontSize: '0.82rem', color: 'var(--text-dim)', margin: '0 0 14px', lineHeight: 1.7}}, f.desc),
+    h("div", {className: "resource-links"},
+      h("a", {className: "res-link-btn primary", href: f.file, target: "_blank", rel: "noopener"}, h(Icons.File, null), " عرض الملف"),
+      h("a", {className: "res-link-btn", href: f.file, download: true}, h(Icons.Folder, null), " تحميل")))));
 const Counter = ({
   l,
   v,
@@ -943,7 +1005,7 @@ const ExplainModal = ({
 function App() {
   const [tab, setTab] = useState('grades'),
     [modal, setModal] = useState(false);
-  const tabIdx = tab === 'calendar' ? 0 : 1;
+  const tabIdx = tab === 'calendar' ? 0 : tab === 'files' ? 1 : 2;
   return h("div", {className: "app"},
     h("div", {className: "container"},
       h("header", {className: "header"},
@@ -961,8 +1023,10 @@ function App() {
       h("div", {className: "nav-tabs", "data-active": tabIdx},
         h("div", {className: "nav-glider"}),
         h("button", {className: `tab-btn ${tab === 'calendar' ? 'active' : ''}`, onClick: () => setTab('calendar')}, "التقويم"),
+        h("button", {className: `tab-btn ${tab === 'files' ? 'active' : ''}`, onClick: () => setTab('files')}, "الملفات"),
         h("button", {className: `tab-btn ${tab === 'grades' ? 'active' : ''}`, onClick: () => setTab('grades')}, "الحاسبة")),
       tab === 'calendar' && h(CalendarView, null),
+      tab === 'files' && h(FilesView, null),
       tab === 'grades' && h(GradeView, null),
       modal && h(ExplainModal, {onClose: () => setModal(false)})));
 }
