@@ -346,6 +346,26 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .wk-item.open .wk-chev{transform:rotate(180deg);color:var(--gold)}
 .wk-body{display:grid;grid-template-columns:1fr;gap:11px;padding-top:11px;animation:fadeIn 0.3s ease}
 @media(min-width:640px){.wk-body{grid-template-columns:1fr 1fr}.wk-body.solo{grid-template-columns:1fr}}
+.wk-meta{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
+.wk-date{font-family:var(--font-nums);font-size:0.68rem;color:var(--text-faint);letter-spacing:0.2px;direction:rtl}
+.wk-badge{font-size:0.62rem;font-weight:800;padding:3px 9px;border-radius:20px;flex-shrink:0;letter-spacing:0.2px;white-space:nowrap}
+.wk-badge.now{color:#07070c;background:var(--gold);box-shadow:0 0 14px rgba(242,193,78,0.35)}
+.wk-badge.next{color:var(--cyan);background:rgba(67,220,245,0.1);border:1px solid rgba(67,220,245,0.3)}
+.wk-item.now .wk-head{border-color:rgba(242,193,78,0.45);background:linear-gradient(160deg,rgba(242,193,78,0.1),rgba(255,255,255,0.02));box-shadow:0 0 24px rgba(242,193,78,0.1)}
+.wk-item.next .wk-head{border-color:rgba(67,220,245,0.28)}
+.wk-item.next .wk-num{color:var(--cyan);background:rgba(67,220,245,0.09);border-color:rgba(67,220,245,0.3)}
+.wk-item.past .wk-head{opacity:0.62}
+.wk-item.past .wk-num{color:var(--text-faint);background:var(--surface);border-color:var(--line)}
+.wk-archive{margin-top:22px;border:1px dashed var(--line-strong);border-radius:16px;padding:6px;background:rgba(255,255,255,0.015)}
+.wk-archive-head{width:100%;display:flex;align-items:center;gap:11px;text-align:right;cursor:pointer;background:transparent;border:none;color:var(--text-dim);padding:12px 12px;font-family:var(--font-body);font-weight:700;font-size:0.88rem;transition:color 0.3s}
+.wk-archive-head:hover{color:var(--text)}
+.wk-archive-count{font-family:var(--font-nums);font-size:0.7rem;font-weight:800;color:var(--text-faint);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin-inline-start:auto}
+.wk-archive-chev{display:flex;color:var(--text-faint);transition:transform 0.3s}
+.wk-archive.open .wk-archive-chev{transform:rotate(180deg)}
+.wk-archive-body{padding:4px 6px 6px;animation:fadeIn 0.3s ease}
+.files-note{font-size:0.78rem;color:var(--text-dim);line-height:1.8;background:rgba(242,193,78,0.06);border:1px solid rgba(242,193,78,0.22);border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px}
+.files-note p+p{margin-top:6px}
+.files-note .fmt{font-family:var(--font-nums);font-size:0.76rem;color:var(--gold);background:rgba(242,193,78,0.1);border:1px solid rgba(242,193,78,0.25);border-radius:6px;padding:2px 8px;white-space:nowrap;display:inline-block}
 .cls-card{border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,0.22);padding:16px;display:flex;flex-direction:column;gap:13px}
 .cls-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:10px}
 .cls-id{font-family:var(--font-nums);font-weight:800;font-size:0.8rem;padding:4px 14px;border-radius:16px;color:#241a05;background:linear-gradient(180deg,#ffe29a,var(--gold) 60%,#cf9a2e)}
@@ -753,6 +773,23 @@ const WEEKS = [
     {id:"15-1 / 15-2",solo:true,topics:["التسليم النهائي لمشروع المقرر","التسليم النهائي لملف المقرر","عرض المشروع — الاحتفالية"],due:["التسليم النهائي لتقرير المشروع","تسليم العرض النهائي","التسليم النهائي لملف المقرر"],prep:[]}
   ]}
 ];
+const TERM_START = [2026, 7, 30];
+const AR_MONTHS = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+const dayIdx = (y, m, d) => Math.floor(Date.UTC(y, m, d) / 86400000);
+const weekStart = w => new Date(Date.UTC(TERM_START[0], TERM_START[1], TERM_START[2] + (w - 1) * 7));
+const weekRange = w => {
+  const a = weekStart(w), b = new Date(a.getTime() + 4 * 86400000);
+  const ma = AR_MONTHS[a.getUTCMonth()], mb = AR_MONTHS[b.getUTCMonth()];
+  return ma === mb
+    ? `${a.getUTCDate()} – ${b.getUTCDate()} ${mb}`
+    : `${a.getUTCDate()} ${ma} – ${b.getUTCDate()} ${mb}`;
+};
+const currentWeek = () => {
+  const t = new Date();
+  const diff = dayIdx(t.getFullYear(), t.getMonth(), t.getDate()) - dayIdx(TERM_START[0], TERM_START[1], TERM_START[2]);
+  if (diff < 0) return 1;
+  return Math.min(WEEKS.length, Math.floor(diff / 7) + 1);
+};
 const ClsBlock = ({type, title, items}) => !items || !items.length ? null : h("div", {className: `cls-blk ${type}`},
   h("h5", null, h("span", {className: "cls-dot"}), title),
   h("ul", null, items.map((it, i) => h("li", {key: i}, it))));
@@ -766,24 +803,41 @@ const ClassCard = ({c}) => c.vac
       h(ClsBlock, {type: "b-top", title: "محتوى الحصة", items: c.topics}),
       h(ClsBlock, {type: "b-due", title: "مطلوب اليوم", items: c.due}),
       h(ClsBlock, {type: "b-prep", title: "التحضير القادم", items: c.prep}));
-const WeekItem = ({wk, open, toggle}) => {
+const WeekItem = ({wk, open, toggle, state}) => {
   const isOpen = open === wk.w;
   const solo = wk.cls.length === 1;
-  return h("div", {className: `wk-item ${isOpen ? 'open' : ''}`},
+  return h("div", {className: `wk-item ${state} ${isOpen ? 'open' : ''}`},
     h("button", {className: "wk-head", onClick: () => toggle(wk.w)},
       h("span", {className: "wk-num"}, wk.w),
-      h("span", {className: "wk-title"}, `الأسبوع ${wk.w}`),
+      h("span", {className: "wk-meta"},
+        h("span", {className: "wk-title"}, `الأسبوع ${wk.w}`),
+        h("span", {className: "wk-date"}, weekRange(wk.w))),
       h("span", {className: "wk-peek"}, wk.peek),
+      state === 'now' ? h("span", {className: "wk-badge now"}, "هذا الأسبوع") : null,
+      state === 'next' ? h("span", {className: "wk-badge next"}, "الأسبوع القادم") : null,
       h("span", {className: "wk-chev"}, h(Icons.ChevronDown, null))),
     isOpen && h("div", {className: `wk-body ${solo ? 'solo' : ''}`},
       wk.cls.map(c => h(ClassCard, {key: c.id, c}))));
 };
 const CalendarView = () => {
-  const [open, setOpen] = useState(1);
+  const cur = currentWeek();
+  const [open, setOpen] = useState(cur);
+  const [showPast, setShowPast] = useState(false);
   const toggle = w => setOpen(o => o === w ? null : w);
+  const stateOf = w => w < cur ? 'past' : w === cur ? 'now' : w === cur + 1 ? 'next' : 'later';
+  const past = WEEKS.filter(wk => wk.w < cur);
+  const ahead = WEEKS.filter(wk => wk.w >= cur);
   return h("div", {className: "content-area"},
     h("div", {className: "section-separator"}, "الجدول الأسبوعي — الترم 481"),
-    WEEKS.map(wk => h(WeekItem, {key: wk.w, wk, open, toggle})),
+    ahead.map(wk => h(WeekItem, {key: wk.w, wk, open, toggle, state: stateOf(wk.w)})),
+    past.length ? h("div", {className: `wk-archive ${showPast ? 'open' : ''}`},
+      h("button", {className: "wk-archive-head", onClick: () => setShowPast(v => !v)},
+        h(Icons.Folder, null),
+        h("span", null, "الأسابيع السابقة"),
+        h("span", {className: "wk-archive-count"}, past.length),
+        h("span", {className: "wk-archive-chev"}, h(Icons.ChevronDown, null))),
+      showPast ? h("div", {className: "wk-archive-body"},
+        past.map(wk => h(WeekItem, {key: wk.w, wk, open, toggle, state: "past"}))) : null) : null,
     h("div", {className: "section-separator"}, "جدول الواجبات"),
     h("div", {className: "cls-card"},
       DUES.map(d => h("div", {key: d.n, className: "input-row"},
@@ -804,18 +858,29 @@ const FILES = [
   {n: 8, file: "files/08-Team-Meeting-Minutes.pdf", title: "محضر اجتماع الفريق", sub: "Team Meeting Minutes", desc: "نموذج توثيق اجتماعات الفريق."},
   {n: 9, file: "files/09-Excel-Part1.pdf", title: "مقدمة في إكسل — الجزء الأول", sub: "Introduction to Excel — Part I", desc: "ملف تدريبي شامل لتعلم أساسيات إكسل."}
 ];
+const ASSIGN1 = [
+  {n: 10, file: "files/10-Assignment1-Excel.pdf", title: "ورقة الواجب الأول", sub: "Assignment #1 — Introduction to Excel Modeling", desc: "نص الواجب والمسألة الخارجية (أسطوانة + مخروط) والمطالب الخمسة ⁦(I–V)⁩ وشروط التسليم."},
+  {n: 11, file: "files/11-Assignment1-Checklist.pdf", title: "قائمة تدقيق الواجب الأول", sub: "Assignment #1 Checklist — Term 481", desc: "قائمة التدقيق الذاتي التي تُرفق فوق صفحة الغلاف — راجع كل بند قبل التسليم."},
+  {n: 12, file: "files/12-Assignment1-Team-Process-Check.pdf", title: "فحص عمل الفريق", sub: "Team Process Check for Excel", desc: "نموذج تقييم عمل الفريق (تقييم من 1 إلى 5) يُعبّأ ويُسلّم مع الواجب."}
+];
+const FileCard = ({f, pinned}) => h("div", {className: `pro-resource-card${pinned ? ' pinned-file' : ''}`},
+  h("div", {className: "resource-header"},
+    h("div", {className: "resource-icon-box type-files"}, h(Icons.File, null)),
+    h("div", {className: "resource-info"},
+      h("h3", null, f.title),
+      h("p", null, f.sub))),
+  h("p", {style: {fontSize: '0.82rem', color: 'var(--text-dim)', margin: '0 0 14px', lineHeight: 1.7}}, f.desc),
+  h("div", {className: "resource-links"},
+    h("a", {className: "res-link-btn primary", href: f.file, target: "_blank", rel: "noopener"}, h(Icons.File, null), " عرض الملف"),
+    h("a", {className: "res-link-btn", href: f.file, download: true}, h(Icons.Folder, null), " تحميل")));
 const FilesView = () => h("div", {className: "content-area"},
+  h("div", {className: "section-separator"}, "الواجب الأول — نمذجة إكسل"),
+  h("div", {className: "files-note"},
+    h("p", null, "التسليم: ملف ⁦Word⁩ للتقرير + ملف ⁦PDF⁩ للتقرير مع قائمة التدقيق وفحص عمل الفريق + ملف إكسل للنموذج."),
+    h("p", null, "تسمية كل ملف بالصيغة ", h("code", {className: "fmt"}, "⁦A? - G? - T?⁩"), ".")),
+  ASSIGN1.map(f => h(FileCard, {key: f.n, f, pinned: true})),
   h("div", {className: "section-separator"}, "ملفات المقرر"),
-  FILES.map(f => h("div", {key: f.n, className: "pro-resource-card"},
-    h("div", {className: "resource-header"},
-      h("div", {className: "resource-icon-box type-files"}, h(Icons.File, null)),
-      h("div", {className: "resource-info"},
-        h("h3", null, f.title),
-        h("p", null, f.sub))),
-    h("p", {style: {fontSize: '0.82rem', color: 'var(--text-dim)', margin: '0 0 14px', lineHeight: 1.7}}, f.desc),
-    h("div", {className: "resource-links"},
-      h("a", {className: "res-link-btn primary", href: f.file, target: "_blank", rel: "noopener"}, h(Icons.File, null), " عرض الملف"),
-      h("a", {className: "res-link-btn", href: f.file, download: true}, h(Icons.Folder, null), " تحميل")))));
+  FILES.map(f => h(FileCard, {key: f.n, f})));
 const Counter = ({
   l,
   v,
@@ -1003,7 +1068,7 @@ const ExplainModal = ({
       h("p", {className: "explain-footer"}, h(Icons.Edit, null), " إذا استجدت أي أشياء إضافية، إن شاء الله تُذكر هنا في نفس هذه الخانة.")));
 };
 function App() {
-  const [tab, setTab] = useState('grades'),
+  const [tab, setTab] = useState('calendar'),
     [modal, setModal] = useState(false);
   const tabIdx = tab === 'calendar' ? 0 : tab === 'files' ? 1 : 2;
   return h("div", {className: "app"},
