@@ -144,11 +144,11 @@
     display: block;
     max-width: var(--container);
     margin-inline: auto;
-    padding: var(--sp-6) var(--sp-4) 0;
+    padding: var(--sp-6) var(--sp-4) calc(var(--bottomnav-h) + env(safe-area-inset-bottom) + var(--sp-8));
     min-height: 60vh;
   }
   .main:focus { outline: none; }
-  @media (min-width: 768px) { .main { padding: var(--sp-8) var(--sp-6) 0; } }
+  @media (min-width: 768px) { .main { padding: var(--sp-8) var(--sp-6) var(--sp-12); } }
 
   .page { animation: page-in var(--dur-slow) var(--ease-out) both; }
   @keyframes page-in { from { opacity: 0; transform: translateY(8px); } }
@@ -387,19 +387,6 @@
   .table tbody tr:last-child > * { border-bottom: 0; }
   .table-scroll { overflow-x: auto; overscroll-behavior-x: contain; border-radius: var(--r-md); }
 
-  /* ---------- Footer ---------- */
-  .footer {
-    max-width: var(--container); margin-inline: auto;
-    padding: var(--sp-12) var(--sp-4) calc(var(--bottomnav-h) + env(safe-area-inset-bottom) + var(--sp-6));
-    color: var(--text-3); font-size: var(--fs-caption); line-height: 2; text-align: center;
-  }
-  @media (min-width: 768px) { .footer { padding-bottom: var(--sp-10); } }
-  .footer a {
-    color: var(--text-2);
-    text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px;
-  }
-  .footer a:hover { color: var(--text); text-decoration-color: var(--brand-line); }
-  .footer-sep { margin-inline: var(--sp-2); opacity: .6; }
 
   /* ---------- Empty state ---------- */
   .empty {
@@ -420,6 +407,5 @@
     .disclosure-panel { grid-template-rows: 1fr !important; visibility: visible !important; }
     .calendar-grid, .calc-layout, .guide-layout { display: block; }
     .card, .week, .class-card, .file, .conv, .event, .due, .legend li, .rows li, .fails li, .callout { break-inside: avoid; }
-    .footer { padding: var(--sp-6) 0 0; }
   }
 }
