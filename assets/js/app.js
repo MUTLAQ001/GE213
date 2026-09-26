@@ -1,7 +1,6 @@
 import { h, cx, ReactDOM, useState, useEffect, useRef } from './lib/react.js';
 import { store } from './lib/storage.js';
 import { TERM } from '../data/term-481.js';
-import { AR_MONTHS } from './lib/dates.js';
 import { Icon } from './components/icons.js';
 import { ToastHost } from './components/ui.js';
 import { CalendarPage } from './pages/calendar.js';
@@ -125,15 +124,6 @@ function AppBar({ current, theme, onToggleTheme }) {
           h('span', null, 'مطلق')))));
 }
 
-function Footer() {
-  const [y, m, d] = TERM.lastUpdated;
-  return h('footer', { className: 'footer' },
-    h('p', null,
-      'طُوّر بواسطة ', h('a', { href: DEV_URL, target: '_blank', rel: 'noopener' }, 'مطلق'),
-      h('span', { className: 'footer-sep', 'aria-hidden': 'true' }, '·'),
-      `آخر تحديث للجدول: ${d} ${AR_MONTHS[m]} ${y}`),
-    h('p', null, h('bdi', null, `${TERM.course} — ${TERM.title}`), h('span', { className: 'footer-sep', 'aria-hidden': 'true' }, '·'), TERM.name));
-}
 
 function App() {
   const route = useRoute();
@@ -154,7 +144,6 @@ function App() {
     h(AppBar, { current: def.id, theme, onToggleTheme: toggleTheme }),
     h('main', { id: 'main', className: 'main', tabIndex: -1 },
       h(def.Page, { key: def.id, sub: route.sub })),
-    h(Footer),
     h(BottomNav, { current: def.id }),
     h(ToastHost));
 }

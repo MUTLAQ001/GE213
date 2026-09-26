@@ -1,4 +1,4 @@
-import { h, cx, useState, useEffect, Fragment } from '../lib/react.js';
+import { h, cx, useState, useEffect, useRef, Fragment } from '../lib/react.js';
 import { WEEKS, DUES, AR_MONTHS } from '../lib/dates.js';
 import { fmtNum } from '../lib/ar.js';
 import { DEF_TABLES, LAPSE_TABLE, MATRIX_E, MATRIX_D, gradeFor } from '../lib/grading.js';
@@ -71,6 +71,7 @@ export function GradeMatrix() {
 
 export function GuidePage({ sub }) {
   const [active, setActive] = useState(sub && SECTIONS.some(s => s.id === sub) ? sub : 'overview');
+  const lock = useRef(0);
 
   // Deep links such as #/guide/defects.
   useEffect(() => { if (sub && SECTIONS.some(s => s.id === sub)) { setActive(sub); scrollToSection(sub); } }, [sub]);
@@ -80,16 +81,24 @@ export function GuidePage({ sub }) {
     if (!('IntersectionObserver' in window)) return;
     const els = SECTIONS.map(s => document.getElementById(s.id)).filter(Boolean);
     const io = new IntersectionObserver(entries => {
+      if (Date.now() < lock.current) return;
       const vis = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
       if (vis[0]) setActive(vis[0].target.id);
     }, { rootMargin: '-80px 0px -65% 0px', threshold: 0 });
     els.forEach(el => io.observe(el));
-    return () => io.disconnect();
+    // The last section can be too short to reach the top: treat the page end as that section.
+    const onScroll = () => {
+      if (Date.now() < lock.current) return;
+      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) setActive(SECTIONS[SECTIONS.length - 1].id);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { io.disconnect(); window.removeEventListener('scroll', onScroll); };
   }, []);
 
   const go = (ev, id) => {
     ev.preventDefault();
     history.replaceState(null, '', `#/guide/${id}`);
+    lock.current = Date.now() + 1200;
     setActive(id);
     scrollToSection(id);
   };
