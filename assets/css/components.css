@@ -108,35 +108,41 @@
     .topnav-link[aria-current="page"] .icon { color: var(--brand-text); }
   }
 
-  /* ---------- Bottom navigation (< 768px) ---------- */
+  /* ---------- Bottom navigation (< 768px) ----------
+     Floating rounded bar; --bottomnav-h is its full footprint (bar + gap below). */
   .bottomnav {
-    position: fixed; inset-inline: 0; bottom: 0; z-index: 50;
+    position: fixed; z-index: 50;
+    inset-inline: var(--sp-3);
+    bottom: calc(env(safe-area-inset-bottom) + var(--sp-3));
+    max-width: 560px; margin-inline: auto;
     background: var(--bar-bg);
     -webkit-backdrop-filter: saturate(1.4) blur(14px);
     backdrop-filter: saturate(1.4) blur(14px);
-    border-top: 1px solid var(--line);
-    padding-bottom: env(safe-area-inset-bottom);
+    border: 1px solid var(--line-strong);
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    padding: 6px;
   }
   .bottomnav-list {
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-    height: var(--bottomnav-h);
-    max-width: 560px; margin-inline: auto;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px;
+    height: calc(var(--bottomnav-h) - var(--sp-3) - 14px);
   }
   .bottomnav-link {
     height: 100%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
     font-size: var(--fs-caption); font-weight: 700;
     color: var(--text-3);
-    transition: color var(--dur-fast);
+    border: 1px solid transparent;
+    border-radius: 22px;
+    transition: color var(--dur-fast), background-color var(--dur) var(--ease-out), border-color var(--dur);
   }
-  .bottomnav-pill {
-    width: 56px; height: 30px;
-    display: grid; place-items: center;
-    border-radius: var(--r-pill);
-    transition: background-color var(--dur) var(--ease-out), color var(--dur);
+  .bottomnav-pill { display: grid; place-items: center; }
+  .bottomnav-link[aria-current="page"] {
+    color: var(--text);
+    background: var(--brand-tint);
+    border-color: var(--brand-line);
   }
-  .bottomnav-link[aria-current="page"] { color: var(--text); }
-  .bottomnav-link[aria-current="page"] .bottomnav-pill { background: var(--brand-tint); color: var(--brand-text); }
+  .bottomnav-link[aria-current="page"] .bottomnav-pill { color: var(--brand-text); }
   @media (min-width: 768px) { .bottomnav { display: none; } }
 
   /* ---------- Page frame ---------- */
