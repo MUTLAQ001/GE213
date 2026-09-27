@@ -4,12 +4,12 @@ import {
   relWeek, relDays, upcomingEvents, weeksWithDeadlines,
 } from '../lib/dates.js';
 import { daysPhrase } from '../lib/ar.js';
-import { FILES, ASSIGN1, FILE_LINKS } from '../../data/files.js';
+import { FILES, ASSIGN1, ASSIGN2, FILE_LINKS } from '../../data/files.js';
 import { TERM } from '../../data/term-481.js';
 import { Icon } from '../components/icons.js';
 import { PageHead, Section, Chip, Code, Callout } from '../components/ui.js';
 
-const ALL_FILES = [...FILES, ...ASSIGN1];
+const ALL_FILES = [...FILES, ...ASSIGN1, ...ASSIGN2];
 const DEADLINE_WEEKS = weeksWithDeadlines();
 const reducedMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const typeIcon = k => (k === 'جماعي' ? 'users' : 'user');
