@@ -26,7 +26,7 @@ export const ASSIGN1 = [
 
 /** ملفات الواجب الثاني. */
 export const ASSIGN2 = [
-  {n: 15, file: "files/15-Assignment2-Ch1.pdf", size: 260192, title: "ورقة الواجب الثاني", sub: "Assignment #2 — Chapter 1: Introducing Models", desc: "نص الواجب الفردي: ثلاثة استدلالات وثلاثة دروس وتعريف المصطلحات، والمسألة الخارجية (مزرعة شمسية أو رياح) بمطلبيها ⁦(I–II)⁩."},
+  {n: 15, file: "files/15-Assignment2-Ch1.pdf", size: 260314, title: "ورقة الواجب الثاني", sub: "Assignment #2 — Chapter 1: Introducing Models", desc: "نص الواجب الفردي: ثلاثة استدلالات وثلاثة دروس وتعريف المصطلحات، والمسألة الخارجية (مزرعة شمسية أو رياح) بمطلبيها ⁦(I–II)⁩."},
   {n: 16, file: "files/16-Assignment2-Checklist.pdf", size: 709408, title: "قائمة تدقيق الواجب الثاني", sub: "Assignment #2 Checklist — Term 481", desc: "قائمة التدقيق الذاتي التي تُرفق فوق صفحة الغلاف — راجع كل بند قبل التسليم."},
   {n: 17, file: "files/17-Assignment2-Team-Process-Check.pdf", size: 484724, title: "فحص عمل الفريق — الفصل 1", sub: "Team Process Check for Chapter 1", desc: "نموذج تقييم الفهم والعمل (تقييم من 1 إلى 5) يُعبّأ ويُسلّم مع الواجب."}
 ];
