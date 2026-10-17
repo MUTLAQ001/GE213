@@ -287,6 +287,7 @@
     color: var(--brand-text); background: var(--brand-tint);
   }
   .naming-btn { min-height: 40px; margin-inline-start: auto; }
+  .naming-hint { flex-basis: 100%; line-height: 1.7; }
 
   .files { display: grid; gap: var(--sp-2); }
   @media (min-width: 1024px) { .files--grid { grid-template-columns: 1fr 1fr; } }
