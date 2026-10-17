@@ -22,7 +22,7 @@ function FileRow({ f }) {
       h(Icon, { name: 'download', size: 20 })));
 }
 
-function Naming({ value }) {
+function Naming({ value, hint }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     const ok = await copyText(value);
@@ -33,7 +33,8 @@ function Naming({ value }) {
     h('span', { className: 'naming-label' }, 'سمِّ كل ملف بالصيغة'),
     h('code', { className: 'naming-code', dir: 'ltr' }, value),
     h('button', { type: 'button', className: 'btn btn--secondary naming-btn', onClick: copy },
-      h(Icon, { name: copied ? 'check' : 'copy', size: 16 }), copied ? 'تم النسخ' : 'نسخ'));
+      h(Icon, { name: copied ? 'check' : 'copy', size: 16 }), copied ? 'تم النسخ' : 'نسخ'),
+    hint ? h('p', { className: 'naming-hint' }, hint) : null);
 }
 
 function Timeline({ d, week }) {
@@ -69,7 +70,7 @@ function AssignmentGroup({ g, week }) {
         h('h3', { className: 'deliver-title' }, h(Icon, { name: 'listChecks', size: 18 }), 'ما الذي تسلّمه؟'),
         h('ul', { className: 'checklist' }, g.deliverables.map((t, i) =>
           h('li', { key: i }, h(Icon, { name: 'check', size: 16 }), h('span', null, t)))),
-        h(Naming, { value: g.naming })),
+        h(Naming, { value: g.naming, hint: g.namingHint })),
       h('ul', { className: 'files files--pinned', 'aria-label': 'ملفات الواجب' }, g.files.map(f => h(FileRow, { key: f.n, f })))));
 }
 
