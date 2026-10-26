@@ -93,4 +93,4 @@ export function upcomingEvents(state, limit = 3) {
 /** Weeks that contain a student action (for the week strip markers). */
 export const weeksWithDeadlines = () => new Set(studentEvents().map(e => e.week));
 
-export { WEEKS, DUES, CLASS_DAYS };
+export { WEEKS, DUES, CLASS_DAYS, BREAKS };
