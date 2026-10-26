@@ -5,7 +5,7 @@
 
 export const FILES = [
   {n: 1, file: "files/01-FDM.pdf", size: 854450, title: "ملف اليوم الأول", sub: "First Day Material", desc: "تعريف عام بمقرر GE-213 ومحتواه وآلية العمل فيه."},
-  {n: 2, file: "files/02-Calendar-481.pdf", size: 287217, title: "تقويم الترم", sub: "Calendar — Term 481", desc: "الجدول الأسبوعي الكامل لكل الحصص والمهام والتسليمات."},
+  {n: 2, file: "files/02-Calendar-481.pdf", size: 200334, title: "تقويم الترم", sub: "Calendar — Term 481", desc: "الجدول الأسبوعي الكامل لكل الحصص والمهام والتسليمات."},
   {n: 3, file: "files/03-Portfolio-Expectations.pdf", size: 261528, title: "توقعات ملف المقرر", sub: "Expectations of Portfolio", desc: "معايير وتوقعات إعداد ملف المقرر (Portfolio) وقوائم التدقيق."},
   {n: 4, file: "files/04-Technical-Work-Reports.pdf", size: 221713, title: "توقعات تقارير العمل الفني", sub: "Technical Work Reports", desc: "معايير كتابة وتقييم تقارير العمل الفني."},
   {n: 5, file: "files/05-Student-Sign-Off.pdf", size: 268907, title: "نموذج التوقيع Sign-off", sub: "Student Sign-off Form", desc: "نموذج توقيع الطالب على استلام وفهم متطلبات المقرر."},

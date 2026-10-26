@@ -1,6 +1,6 @@
 import { h, cx, useState, useEffect, useRef, Fragment } from '../lib/react.js';
 import {
-  WEEKS, DUES, CLASS_DAYS, weekRange, weekStart, fmtDay, academicState, parseClass, classDate,
+  WEEKS, DUES, CLASS_DAYS, BREAKS, weekRange, weekStart, fmtDay, academicState, parseClass, classDate,
   relWeek, relDays, upcomingEvents, weeksWithDeadlines,
 } from '../lib/dates.js';
 import { daysPhrase } from '../lib/ar.js';
@@ -232,7 +232,7 @@ export function CalendarPage() {
     h(PageHead, {
       eyebrow: h(Fragment, null, h(Icon, { name: 'calendar', size: 16 }), h('bdi', null, `${TERM.course} · ${TERM.title}`)),
       title: 'التقويم الأسبوعي',
-      lead: 'حصص الأسابيع الخمسة عشر، والمطلوب في كل حصة، ومواعيد التسليم.',
+      lead: 'حصص الأسابيع الأربعة عشر، والمطلوب في كل حصة، ومواعيد التسليم.',
     }),
     h(NowCard, { state }),
     h('div', { className: 'calendar-grid' },
@@ -254,5 +254,8 @@ export function CalendarPage() {
           : null),
       h(DuesList, { state: { ...state, week: current } })),
     CLASS_DAYS ? null : h(Callout, { tone: 'info', className: 'calendar-note' },
-      'تواريخ الأسابيع من الأحد إلى الخميس. يوما الجمعة والسبت يعرضان الأسبوع القادم مباشرة.'));
+      'تواريخ الأسابيع من الأحد إلى الخميس. يوما الجمعة والسبت يعرضان الأسبوع القادم مباشرة.'),
+    BREAKS.length ? h(Callout, { tone: 'info', className: 'calendar-note' },
+      `بين الأسبوعين ${BREAKS[0].after} و${BREAKS[0].after + 1} أسابيع بلا حصص: `,
+      BREAKS.map((b, i) => `${i ? '، ثم ' : ''}${b.txt} (${b.range})`).join(''), '.') : null);
 }

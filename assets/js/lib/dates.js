@@ -1,4 +1,4 @@
-import { TERM_START, WEEKS, DUES, CLASS_DAYS } from '../../data/term-481.js';
+import { TERM_START, WEEKS, DUES, CLASS_DAYS, BREAKS } from '../../data/term-481.js';
 import { weeksPhrase, daysPhrase } from './ar.js';
 
 export const AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
@@ -8,8 +8,11 @@ const dayIdx = (y, m, d) => Math.floor(Date.UTC(y, m, d) / DAY);
 const localIdx = now => dayIdx(now.getFullYear(), now.getMonth(), now.getDate());
 const TERM_IDX = dayIdx(...TERM_START);
 
+/** Calendar weeks (0-based) before teaching week w: its own position plus every break before it. */
+const calWeek = w => w - 1 + BREAKS.filter(b => b.after < w).length;
+
 /** Sunday that opens week w (UTC date). */
-export const weekStart = w => new Date((TERM_IDX + (w - 1) * 7) * DAY);
+export const weekStart = w => new Date((TERM_IDX + calWeek(w) * 7) * DAY);
 
 /** "20 – 24 سبتمبر" or "27 سبتمبر – 1 أكتوبر" (Sunday to Thursday). */
 export const weekRange = w => {
@@ -28,9 +31,13 @@ export const fmtDay = d => `${AR_DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${AR_MON
 export function academicState(now = new Date()) {
   const diff = localIdx(now) - TERM_IDX;
   if (diff < 0) return { phase: 'before', week: 1, daysToStart: -diff, weekend: false };
-  const raw = Math.floor(diff / 7) + 1, dow = diff % 7;
-  const weekend = dow >= 5;
-  const week = weekend ? raw + 1 : raw;
+  const cal = Math.floor(diff / 7), dow = diff % 7;
+  let weekend = dow >= 5;
+  /* Teaching week of this calendar week; a break week looks ahead to the next teaching week. */
+  let raw = 1;
+  while (raw <= WEEKS.length && calWeek(raw) < cal) raw++;
+  if (calWeek(raw) > cal) weekend = true;
+  const week = weekend && calWeek(raw) === cal ? raw + 1 : raw;
   if (week > WEEKS.length) return { phase: 'after', week: WEEKS.length + 1, weekend: false };
   return { phase: 'during', week, weekend, dow };
 }
