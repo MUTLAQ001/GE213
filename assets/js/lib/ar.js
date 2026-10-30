@@ -6,7 +6,6 @@ export const arCount = (n, [one, two, few, many]) =>
 
 export const weeksPhrase = n => arCount(n, ['أسبوع', 'أسبوعين', 'أسابيع', 'أسبوعًا']);
 export const daysPhrase = n => arCount(n, ['يوم', 'يومين', 'أيام', 'يومًا']);
-export const filesPhrase = n => arCount(n, ['ملف واحد', 'ملفان', 'ملفات', 'ملفًا']);
 
 /** "عيب واحد" · "عيبان" · "3 عيوب" · "0.5 عيب" — fractions stay singular. */
 export const defLabel = n => n === 1 ? 'عيب واحد' : n === 2 ? 'عيبان'
