@@ -126,7 +126,7 @@ export function GuidePage({ sub }) {
       h('div', { className: 'guide-body' },
         h(GSection, { id: 'overview' },
           h(Callout, { tone: 'warning', icon: 'alert' },
-            h('strong', null, 'GE 213 امتداد لـ GE 211، لكن بدون كويزات وبدون قسمين.'),
+            h('strong', null, 'GE213 امتداد لـ GE211، لكن بدون كويزات وبدون قسمين.'),
             ' قسم واحد فقط بحصتين أسبوعيًا، وكل شيء يعتمد على الواجبات والمشروع والانضباط. افهم نظام العيوب من أول يوم.'),
           h('ul', { className: 'facts' },
             h('li', null, h('b', { className: 'num' }, WEEKS.length), h('span', null, 'أسبوعًا')),
