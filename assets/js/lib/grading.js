@@ -68,9 +68,9 @@ export const migratePlag = (v, nameAt) => Array.isArray(v)
 
 /** Conversion tables shown in the guide (each pair is [count, defects]). */
 export const DEF_TABLES = [
-  { key: 'nce', title: 'بلا جهد مقنع أو لم يُسلَّم', code: 'NCE / NS', tone: 'danger', unit: 'عدد الواجبات',
+  { key: 'nce', title: 'بلا جهد مقنع أو لم يُسلَّم', code: 'NCE / NS', tone: 'rate-nce', unit: 'عدد الواجبات',
     pairs: [['1', nceDef(1)], ['2', nceDef(2)], ['3', nceDef(3)], ['4+', nceDef(4)]] },
-  { key: 'ni', title: 'يحتاج تحسين', code: 'NI', tone: 'warning', unit: 'عدد الواجبات',
+  { key: 'ni', title: 'يحتاج تحسين', code: 'NI', tone: 'rate-ni', unit: 'عدد الواجبات',
     pairs: [['1', niDef(1)], ['2', niDef(2)], ['3', niDef(3)], ['4', niDef(4)], ['5', niDef(5)], ['6+', niDef(6)]] },
   { key: 'plag', title: 'نسبة الاستلال — لكل تسليم', code: 'Plagiarism', tone: 'danger', unit: 'النسبة',
     pairs: [['>35%', plagDef(36)], ['50%', plagDef(50)], ['60%', plagDef(60)], ['70%', plagDef(70)], ['80%', plagDef(80)], ['90%', plagDef(90)]] },

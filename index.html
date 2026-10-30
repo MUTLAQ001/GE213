@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GE 213 — الترم 481</title>
-<meta name="description" content="موقع مقرر GE 213 للترم 481: التقويم الأسبوعي، وملفات المقرر، وحاسبة التقدير، ودليل نظام العيوب.">
+<title>GE 213 الترم 481 — التقويم والملفات وحاسبة التقدير</title>
+<meta name="description" content="مرجع طلاب GE 213 (Introduction to Engineering Design-2) للترم 481: المطلوب في كل حصة، ومواعيد التسليم، وملفات الواجبات، وحاسبة التقدير، ودليل نظام العيوب.">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0B0D12" media="(prefers-color-scheme: dark)" data-default="#0B0D12">
 <meta name="theme-color" content="#F6F7FB" media="(prefers-color-scheme: light)" data-default="#F6F7FB">
@@ -14,13 +14,16 @@
 <meta property="og:locale" content="ar_SA">
 <meta property="og:site_name" content="GE 213">
 <meta property="og:url" content="https://mutlaq001.github.io/GE213/">
-<meta property="og:title" content="GE 213 — الترم 481">
-<meta property="og:description" content="التقويم الأسبوعي، وملفات المقرر، وحاسبة التقدير، ودليل نظام العيوب.">
+<meta property="og:title" content="GE 213 الترم 481 — التقويم والملفات وحاسبة التقدير">
+<meta property="og:description" content="المطلوب في كل حصة، ومواعيد التسليم، وملفات الواجبات، وحاسبة التقدير، ودليل نظام العيوب.">
 <meta property="og:image" content="https://mutlaq001.github.io/GE213/assets/icons/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="شعار GE 213 باللون الذهبي على خلفية داكنة">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"GE 213 — الترم 481","url":"https://mutlaq001.github.io/GE213/","inLanguage":"ar"}
+</script>
 
 <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/icons/icon-64.png" type="image/png" sizes="64x64">
@@ -33,6 +36,7 @@
 
 <link rel="preload" href="assets/fonts/ibm-plex-sans-arabic-400-arabic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/alexandria-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/alexandria-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
@@ -52,21 +56,34 @@
     } catch (e) {}
   })();
 </script>
-<script defer src="assets/vendor/react.production.min.js"></script>
-<script defer src="assets/vendor/react-dom.production.min.js"></script>
+<!-- React is on the critical path to the calendar: fetch it ahead of fonts and images. -->
+<script defer fetchpriority="high" src="assets/vendor/react.production.min.js"></script>
+<script defer fetchpriority="high" src="assets/vendor/react-dom.production.min.js"></script>
 <link rel="modulepreload" href="assets/js/app.js">
 <link rel="modulepreload" href="assets/js/lib/react.js">
 <link rel="modulepreload" href="assets/js/lib/dates.js">
-<link rel="modulepreload" href="assets/js/lib/grading.js">
+<link rel="modulepreload" href="assets/js/lib/storage.js">
+<link rel="modulepreload" href="assets/js/lib/ar.js">
 <link rel="modulepreload" href="assets/js/components/ui.js">
 <link rel="modulepreload" href="assets/js/components/icons.js">
 <link rel="modulepreload" href="assets/js/pages/calendar.js">
 <link rel="modulepreload" href="assets/data/term-481.js">
+<link rel="modulepreload" href="assets/data/files.js">
 <script type="module" src="assets/js/app.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">انتقل إلى المحتوى</a>
-<div id="root"><div class="boot" aria-hidden="true"><span class="boot-mark">GE 213</span></div></div>
+<!-- Readable before JavaScript runs (and by crawlers); React replaces it on load. -->
+<div id="root"><div class="boot">
+  <h1 class="boot-mark">GE 213</h1>
+  <p class="boot-lead">مرجع طلاب <bdi>Introduction to Engineering Design-2</bdi> للترم 481: المطلوب في كل حصة، ومواعيد التسليم، وملفات الواجبات، وحاسبة التقدير، ودليل نظام العيوب.</p>
+  <ul class="boot-links">
+    <li><a href="#/calendar">التقويم الأسبوعي</a></li>
+    <li><a href="#/files">ملفات الواجبات والمقرر</a></li>
+    <li><a href="#/calculator">حاسبة التقدير</a></li>
+    <li><a href="#/guide">دليل التقييم والعيوب</a></li>
+  </ul>
+</div></div>
 <noscript><p class="boot">يحتاج هذا الموقع إلى تفعيل JavaScript في المتصفح.</p></noscript>
 <script nomodule>document.getElementById('root').innerHTML = '<p class="boot">متصفحك قديم ولا يدعم هذا الموقع. حدّثه أو استخدم متصفحًا آخر.</p>';</script>
 </body>

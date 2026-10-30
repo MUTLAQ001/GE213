@@ -3,12 +3,24 @@ import { Icon } from './icons.js';
 import { fmtNum } from '../lib/ar.js';
 
 /** Page heading: every route starts with its own h1 (focused on navigation). */
-export function PageHead({ eyebrow, title, lead, children }) {
-  return h('header', { className: 'page-head' },
+export function PageHead({ eyebrow, title, lead, hiddenTitle, children }) {
+  return h('header', { className: cx('page-head', hiddenTitle && 'page-head--compact') },
     eyebrow ? h('p', { className: 'page-eyebrow' }, eyebrow) : null,
-    h('h1', { className: 'page-title', tabIndex: -1 }, title),
-    lead ? h('p', { className: 'page-lead' }, lead) : null,
+    h('h1', { className: cx('page-title', hiddenTitle && 'sr-only'), tabIndex: -1 }, title),
+    lead ? h('p', { className: cx('page-lead', hiddenTitle && 'sr-only') }, lead) : null,
     children);
+}
+
+/** Scrolls an element into view and flashes it, for deep links such as #/files?a=2. */
+export function revealTarget(el) {
+  if (!el) return;
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  el.classList.remove('is-target');
+  void el.offsetWidth; // restart the highlight when the same link is used twice
+  el.classList.add('is-target');
+  clearTimeout(el._targetTimer);
+  el._targetTimer = setTimeout(() => el.classList.remove('is-target'), 2400);
 }
 
 export function Section({ id, title, icon, meta, lead, className, children }) {
@@ -35,12 +47,12 @@ export function Callout({ tone = 'info', icon = 'info', title, children, classNa
 }
 
 /** Numeric stepper with 40–44px targets. DOM order is decrease, value, increase. */
-export function Stepper({ label, code, hint, value, onChange, step = 1, min = 0, max = 99 }) {
+export function Stepper({ label, code, codeTone, hint, value, onChange, step = 1, min = 0, max = 99 }) {
   const id = useId();
   const clamp = v => Math.min(max, Math.max(min, Math.round(v * 10) / 10));
   return h('div', { className: 'field' },
     h('div', { className: 'field-label' },
-      h('span', { className: 'field-title', id: `${id}-l` }, label, code ? h(Chip, null, h('bdi', null, code)) : null),
+      h('span', { className: 'field-title', id: `${id}-l` }, label, code ? h(Chip, { tone: codeTone }, h('bdi', null, code)) : null),
       hint ? h('span', { className: 'field-hint', id: `${id}-h` }, hint) : null),
     h('div', { className: 'stepper', role: 'group', 'aria-labelledby': `${id}-l`, 'aria-describedby': hint ? `${id}-h` : undefined },
       h('button', { type: 'button', className: 'stepper-btn', onClick: () => onChange(clamp(value - step)), disabled: value <= min, 'aria-label': `إنقاص: ${label}` }, h(Icon, { name: 'minus', size: 18 })),

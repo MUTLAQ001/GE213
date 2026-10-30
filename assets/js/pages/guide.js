@@ -24,12 +24,13 @@ const GSection = ({ id, children }) => {
     children);
 };
 
+// The five assessment badges keep the same colours everywhere on the site.
 const LEGEND = [
-  ['E', 'success', 'تجاوز التوقعات', 'حققت المطلوب وزدت عليه شيئًا له قيمة.'],
-  ['M', 'accent', 'حقق التوقعات', 'أنجزت كل بنود قائمة التدقيق (Checklist).'],
-  ['NI', 'warning', 'يحتاج تحسين', 'نقص جزئي في التوقعات.'],
-  ['NCE', 'danger', 'بلا جهد مقنع', 'وتُسجَّل معه مخالفة انضباط.'],
-  ['NS', 'danger', 'لم يُسلَّم', 'وتُسجَّل معه مخالفة انضباط.'],
+  ['E', 'rate-e', 'تجاوز التوقعات', 'حققت المطلوب وزدت عليه شيئًا له قيمة.'],
+  ['M', 'rate-m', 'حقق التوقعات', 'أنجزت كل بنود قائمة التدقيق (Checklist).'],
+  ['NI', 'rate-ni', 'يحتاج تحسين', 'نقص جزئي في التوقعات.'],
+  ['NCE', 'rate-nce', 'بلا جهد مقنع', 'وتُسجَّل معه مخالفة انضباط.'],
+  ['NS', 'rate-nce', 'لم يُسلَّم', 'وتُسجَّل معه مخالفة انضباط.'],
 ];
 
 const LAPSES = [
@@ -52,6 +53,7 @@ function ConvTable({ title, code, tone, unit, pairs }) {
   return h('figure', { className: 'conv' },
     h('figcaption', { className: 'conv-head' }, h('span', null, title), h(Chip, { tone }, h('bdi', null, code))),
     h('table', { className: 'table conv-table' },
+      h('caption', { className: 'sr-only' }, `${title}: ${unit} وما يقابلها من عيوب`),
       h('thead', null, h('tr', null, h('th', { scope: 'col' }, unit), h('th', { scope: 'col' }, 'العيوب'))),
       h('tbody', null, pairs.map(([k, v]) => h('tr', { key: k },
         h('td', null, h('bdi', null, k)),
@@ -59,14 +61,17 @@ function ConvTable({ title, code, tone, unit, pairs }) {
 }
 
 export function GradeMatrix() {
-  return h('div', { className: 'table-scroll', role: 'region', 'aria-label': 'جدول التقدير النهائي', tabIndex: 0 },
+  return h('div', { className: 'table-scroll-wrap' },
+   h('p', { className: 'scroll-hint', 'aria-hidden': 'true' }, 'اسحب ', h('span', { className: 'scroll-hint-arrow' }, '←')),
+   h('div', { className: 'table-scroll', role: 'region', 'aria-label': 'جدول التقدير النهائي', tabIndex: 0 },
     h('table', { className: 'matrix matrix--full' },
+      h('caption', { className: 'sr-only' }, 'جدول التقدير النهائي: الصفوف عدد الـ Exceeds، والأعمدة مجموع العيوب'),
       h('thead', null, h('tr', null,
         h('th', { scope: 'col', className: 'matrix-corner' }, h('abbr', { title: 'عدد الـ Exceeds' }, 'E'), ' \\ العيوب'),
         MATRIX_D.map(d => h('th', { key: d, scope: 'col' }, fmtNum(d))))),
       h('tbody', null, MATRIX_E.map(e => h('tr', { key: e },
         h('th', { scope: 'row' }, e === 3 ? '3+' : e),
-        MATRIX_D.map(d => { const g = gradeFor(e, d); return h('td', { key: d, className: cx('mcell', `g-${g[0]}`) }, h('bdi', null, g)); }))))));
+        MATRIX_D.map(d => { const g = gradeFor(e, d); return h('td', { key: d, className: cx('mcell', `g-${g[0]}`) }, h('bdi', null, g)); })))))));
 }
 
 export function GuidePage({ sub }) {

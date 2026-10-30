@@ -45,7 +45,7 @@
     border: 1px solid var(--brand-line); border-radius: var(--r-pill);
     padding: 1px var(--sp-2); white-space: nowrap;
   }
-  @media (max-width: 379px) { .brand-term { display: none; } }
+  @media (max-width: 359px) { .brand-mark { font-size: 1rem; } .brand-logo { width: 28px; height: 28px; } }
   .appbar-actions { margin-inline-start: auto; display: flex; align-items: center; gap: var(--sp-1); }
 
   .icon-btn {
@@ -61,14 +61,16 @@
 
   .dev-link {
     display: inline-flex; align-items: center; gap: var(--sp-2);
-    min-height: 40px; padding-inline: var(--sp-3);
+    min-height: 44px; padding-inline: var(--sp-3);
     border: 1px solid var(--line-strong); border-radius: var(--r-pill);
     color: var(--text-2); font-size: var(--fs-small); font-weight: 700;
     transition: border-color var(--dur-fast), color var(--dur-fast), background-color var(--dur-fast);
   }
   .dev-link .icon { color: var(--brand-text); }
   .dev-link:hover { color: var(--text); border-color: var(--brand-line); background: var(--brand-tint); }
-  .dev-label { display: none; color: var(--text-3); font-weight: 500; }
+  .dev-label { display: none; color: var(--text-3); font-weight: 400; }
+  /* Small phones: the footer carries the Telegram link, the header keeps the term badge. */
+  @media (max-width: 479px) { .dev-link { display: none; } }
   @media (min-width: 1024px) { .dev-label { display: inline; } }
 
   /* ---------- Top navigation (≥ 768px) ---------- */
@@ -150,16 +152,20 @@
     display: block;
     max-width: var(--container);
     margin-inline: auto;
-    padding: var(--sp-6) var(--sp-4) calc(var(--bottomnav-h) + env(safe-area-inset-bottom) + var(--sp-8));
+    padding: var(--sp-6) var(--sp-4) var(--sp-10);
     min-height: 60vh;
   }
   .main:focus { outline: none; }
   @media (min-width: 768px) { .main { padding: var(--sp-8) var(--sp-6) var(--sp-12); } }
 
-  .page { animation: page-in var(--dur-slow) var(--ease-out) both; }
-  @keyframes page-in { from { opacity: 0; transform: translateY(8px); } }
+  /* Section change: a 200ms fade only (no movement), never on the first page of a visit. */
+  .page-frame.is-entering { animation: page-in var(--dur-page) linear both; }
+  @keyframes page-in { from { opacity: 0; } }
+  .page-loading { min-height: 50vh; display: grid; place-items: center; }
+  .page-loading-error { display: grid; justify-items: center; gap: var(--sp-3); text-align: center; color: var(--text-2); }
 
   .page-head { margin-bottom: var(--sp-6); }
+  .page-head--compact { margin-bottom: var(--sp-4); }
   .page-eyebrow {
     display: flex; align-items: center; gap: var(--sp-2);
     font-size: var(--fs-caption); font-weight: 700;
@@ -189,6 +195,13 @@
     box-shadow: var(--shadow-1);
     padding: var(--sp-4);
   }
+  /* A link whose hit area covers its whole card; other controls in the card sit above it. */
+  .stretched::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+  .stretched:focus-visible { outline: none; }
+  .stretched:focus-visible::after { outline: 2px solid var(--focus-color); outline-offset: 2px; border-radius: var(--r-lg); }
+  /* Deep-link target (#/files?a=2): a short golden flash. */
+  .is-target { animation: target-flash 2.4s var(--ease-out); }
+  @keyframes target-flash { 0%, 40% { box-shadow: 0 0 0 3px var(--brand-line), var(--shadow-2); } 100% { box-shadow: var(--shadow-1); } }
   @media (min-width: 768px) { .card { padding: var(--sp-5); } }
   .card-title { font-size: var(--fs-h3); font-weight: 700; display: flex; align-items: center; gap: var(--sp-2); }
   .card-title .icon { color: var(--brand-text); }
@@ -196,7 +209,7 @@
   /* ---------- Chip ---------- */
   .chip {
     display: inline-flex; align-items: center; gap: 4px;
-    min-height: 24px; padding: 1px var(--sp-2);
+    min-height: 24px; padding: 0 var(--sp-2);
     border-radius: var(--r-pill);
     font-size: var(--fs-caption); font-weight: 700; line-height: 1.5;
     white-space: nowrap;
@@ -211,13 +224,23 @@
   .chip--danger  { color: var(--danger);      background: var(--danger-tint);  border-color: var(--danger-line); }
   .chip--info    { color: var(--info);        background: var(--info-tint);    border-color: var(--info-line); }
   .chip--solid   { color: var(--on-brand);    background: var(--brand);        border-color: transparent; }
+  /* Urgency scale: one colour per meaning (tokens.css). */
+  .chip--urgent  { color: var(--urgent);      background: var(--urgent-tint);  border-color: var(--urgent-line); }
+  .chip--soon    { color: var(--soon);        background: var(--soon-tint);    border-color: var(--soon-line); }
+  .chip--next    { color: var(--next);        background: var(--next-tint);    border-color: var(--next-line); }
+  .chip--done-plain { color: var(--done); background: transparent; border-color: transparent; padding-inline: 0; }
+  /* The five assessment badges, identical everywhere. */
+  .chip--rate-e   { color: var(--grade-A); background: color-mix(in srgb, var(--grade-A) 12%, transparent); border-color: color-mix(in srgb, var(--grade-A) 35%, transparent); }
+  .chip--rate-m   { color: var(--grade-B); background: color-mix(in srgb, var(--grade-B) 12%, transparent); border-color: color-mix(in srgb, var(--grade-B) 35%, transparent); }
+  .chip--rate-ni  { color: var(--soon);    background: var(--soon-tint);   border-color: var(--soon-line); }
+  .chip--rate-nce { color: var(--urgent);  background: var(--urgent-tint); border-color: var(--urgent-line); }
 
   /* Class codes such as 4-1: always left-to-right and tabular. */
   .code {
     display: inline-flex; align-items: center; justify-content: center;
-    min-width: 2.9em; padding: 1px 6px;
-    border-radius: 6px;
-    font-size: var(--fs-caption); font-weight: 700; line-height: 1.6;
+    min-width: 2.9em; min-height: 24px; padding: 0 6px;
+    border-radius: var(--r-sm);
+    font-size: var(--fs-caption); font-weight: 700; line-height: 1.5;
     font-variant-numeric: tabular-nums;
     direction: ltr; unicode-bidi: isolate;
     color: var(--text-2); background: var(--surface-2);
@@ -233,13 +256,21 @@
     font-size: var(--fs-small); font-weight: 700; white-space: nowrap;
     transition: background-color var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast);
   }
-  .btn:active { transform: scale(.98); }
+  .btn:active:not(:disabled) { transform: scale(.98); }
+  .btn:focus-visible { outline-width: 3px; outline-offset: 2px; border-radius: var(--r-md); }
+  .btn:disabled { opacity: .4; }
   .btn--primary { background: var(--brand); color: var(--on-brand); }
-  .btn--primary:hover { filter: brightness(1.06); }
+  .btn--primary:hover { background: var(--brand-hover); }
+  .btn--primary:active { background: var(--brand-active); }
   .btn--secondary { background: var(--surface-2); color: var(--text); border-color: var(--line-strong); }
   .btn--secondary:hover { background: var(--surface-3); }
+  .btn--secondary:active { background: var(--surface-3); border-color: var(--brand-line); }
   .btn--ghost { color: var(--text-2); }
   .btn--ghost:hover { background: var(--surface-2); color: var(--text); }
+  .btn--ghost:active { background: var(--surface-3); }
+  /* 36px visual height; the invisible ::after band brings the touch target to 44px. */
+  .btn--sm { position: relative; min-height: 36px; padding: 0 var(--sp-3); }
+  .btn--sm::after { content: ""; position: absolute; inset: -4px 0; }
   .btn--danger { color: var(--danger); border-color: var(--danger-line); }
   .btn--danger:hover { background: var(--danger-tint); }
   .btn--block { width: 100%; }
@@ -283,7 +314,8 @@
   }
   .disclosure-inner { overflow: hidden; min-height: 0; }
   .disclosure-chev { color: var(--text-3); transition: transform var(--dur) var(--ease-out), color var(--dur-fast); }
-  .is-open .disclosure-chev { transform: rotate(180deg); color: var(--brand-text); }
+  /* Only the control's own chevron turns: an open archive must not flip the chevrons of the weeks inside it. */
+  [aria-expanded="true"] > .disclosure-chev { transform: rotate(180deg); color: var(--brand-text); }
 
   /* ---------- Toast ---------- */
   .toast-host {
@@ -302,12 +334,12 @@
     background: var(--surface-3); color: var(--text);
     border: 1px solid var(--line-strong); border-radius: var(--r-md);
     box-shadow: var(--shadow-3);
-    font-size: var(--fs-small); font-weight: 500;
+    font-size: var(--fs-small); font-weight: 400;
     animation: toast-in var(--dur) var(--ease-out);
   }
   .toast .icon { color: var(--success); }
   .toast-action {
-    min-height: 40px; padding-inline: var(--sp-3);
+    min-height: 44px; padding-inline: var(--sp-3);
     border-radius: var(--r-sm);
     color: var(--brand-text); font-weight: 700;
   }
@@ -331,12 +363,11 @@
     background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-md);
   }
   .stepper-btn {
-    width: 40px; height: 40px;
+    width: 44px; height: 44px;
     display: grid; place-items: center;
     border-radius: 9px; color: var(--text);
     transition: background-color var(--dur-fast), color var(--dur-fast);
   }
-  @media (pointer: coarse) { .stepper-btn { width: 44px; height: 44px; } }
   .stepper-btn:hover:not(:disabled) { background: var(--surface-3); }
   .stepper-btn:active:not(:disabled) { background: var(--brand-tint); color: var(--brand-text); }
   .stepper-btn:disabled { opacity: .35; }
@@ -394,6 +425,21 @@
   .table-scroll { overflow-x: auto; overscroll-behavior-x: contain; border-radius: var(--r-md); }
 
 
+  /* ---------- Footer ---------- */
+  .site-foot {
+    border-top: 1px solid var(--line);
+    padding: var(--sp-6) var(--sp-4) calc(var(--bottomnav-h) + env(safe-area-inset-bottom) + var(--sp-4));
+  }
+  @media (min-width: 768px) { .site-foot { padding: var(--sp-6) var(--sp-6) var(--sp-8); } }
+  .site-foot-inner { max-width: var(--container); margin-inline: auto; display: grid; gap: var(--sp-1); font-size: var(--fs-caption); line-height: 1.8; color: var(--text-3); }
+  .site-foot a {
+    display: inline-block; padding-block: 10px; margin-block: -10px;
+    color: var(--text-2); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px;
+  }
+  .site-foot a:hover { color: var(--text); text-decoration-color: currentColor; }
+  .site-foot-br { display: none; }
+  @media (max-width: 767px) { .site-foot-br { display: inline; } .site-foot .sep { display: none; } }
+
   /* ---------- Empty state ---------- */
   .empty {
     display: flex; align-items: center; gap: var(--sp-2);
@@ -406,12 +452,15 @@
 @layer utilities {
   @media print {
     .appbar, .bottomnav, .toast-host, .result-bar, .skip-link, .strip, .toc, .dev-link,
-    .disclosure-chev, .file-dl, .naming-btn, .result-actions, .btn--dashed, .gsec-cta { display: none !important; }
+    .disclosure-chev, .file-dl, .naming-btn, .result-actions, .btn--dashed, .gsec-cta,
+    .next-due-actions, .due-card-btn, .abbr, .offline-btn, .task-check, .scroll-hint, .dues-done-btn { display: none !important; }
+    .abbr-panel { display: none !important; }
     .main { padding: 0; max-width: none; }
-    .page { animation: none; }
+    .page-frame, .site-foot { animation: none; }
+    .site-foot { padding: var(--sp-4) 0 0; }
     *, *::before, *::after { transition: none !important; animation: none !important; }
     .disclosure-panel { grid-template-rows: 1fr !important; visibility: visible !important; }
     .calendar-grid, .calc-layout, .guide-layout { display: block; }
-    .card, .week, .class-card, .file, .conv, .event, .due, .legend li, .rows li, .fails li, .callout { break-inside: avoid; }
+    .card, .week, .class-card, .file, .conv, .due-card, .hero, .next-due, .legend li, .rows li, .fails li, .callout { break-inside: avoid; }
   }
 }
