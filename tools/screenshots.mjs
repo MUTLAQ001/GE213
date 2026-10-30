@@ -10,7 +10,7 @@ import fs from 'fs';
 const base = process.argv[2] || 'http://127.0.0.1:8000/';
 const date = process.argv[3] || null;          // e.g. 2026-09-27T09:00:00+03:00 to preview a given day
 const routes = ['calendar', 'files', 'calculator', 'guide'];
-const widths = [320, 390, 768, 1366];
+const widths = [340, 390, 768, 1366];
 const themes = ['dark', 'light'];
 const out = new URL('./out/', import.meta.url).pathname;
 fs.mkdirSync(out, { recursive: true });
